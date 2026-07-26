@@ -263,6 +263,11 @@ SET_MOD PARAM="z_offset" VALUE=0.25
 ## Sound
 You can customize sound indications or completely disable them. Additionally, you can configure MIDI playback for specific events. Available MIDI files are located in **Configuration -> mod_data -> midi**. You can also add your own MIDI files by uploading them to the **midi** folder.
 
+The filament loading workflow plays `BEEP` after the nozzle reaches its target
+temperature and after each load, unload, or purge movement completes. Existing
+installations keep their persisted sound preference; enable these notifications
+with `SET_MOD PARAM="sound" VALUE=1` if sound was previously disabled.
+
 It is controlled by the following mod's [parameters](/docs/CONFIGURATION.md):
 - `sound`: Disable all sound indication by setting this parameter to 0.
 - `midi_on`: Play MIDI when the printer boots.

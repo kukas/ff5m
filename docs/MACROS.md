@@ -63,9 +63,9 @@ This document provides a concise overview of the G-code macros defined in the `b
   - **Defaults**: Uses `purge_distance` variable (25 mm).
 
 - **LOAD_MATERIAL**
-  - **Description**: Guides manual filament loading/changing with material selection prompts.
+  - **Description**: Guides manual filament loading/changing with material selection prompts and beeps when heating completes.
   - **Parameters**: None.
-  - **Defaults**: Prompts for material selection (PLA, PETG, ABS) if extruder is not preheated.
+  - **Defaults**: Prompts for material selection (PLA, PETG, ABS) if extruder is not preheated. Load, unload, and purge beep after their movement completes when `sound` is enabled.
 
 - **M600**
   - **Description**: Pauses printing for filament switching, offering load/unload/purge options.
