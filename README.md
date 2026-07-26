@@ -40,6 +40,7 @@ It’s restorable though, but **it requires additional hardware** or soldering i
 - **Root** access (with zsh/.oh-my-zsh)
 - **Buzzer** with ability to play monotonic melodies (midi / notes)
 - Patched **video streamer** with dramatically reduced memory usage
+- Optional local **15-second timelapse** capture with no cloud upload
 - **Timelapse** support via [Moonraker Telegram bot](https://github.com/nlef/moonraker-telegram-bot) installed on external host
 - Adaptive bed meshing with **KAMP** with Smart Parking.
 - Built-in **MD5** checks for gcode files.
@@ -53,6 +54,17 @@ It’s restorable though, but **it requires additional hardware** or soldering i
 - Customized dedicated Linux environment based on **Buildroot**
 - **Entware** package manager for additional software installation
 - **Dual boot** with stock Flashforge software / Klipper Mod
+
+### Fork Additions
+
+- The raw camera service listens on `127.0.0.1` by default so it cannot bypass
+  authentication provided by a proxy or SSH tunnel.
+- The nozzle lifts to `Z5` while cooling to the probing temperature after
+  automatic cleaning.
+- An optional local timelapse service captures one JPEG every 15 seconds while
+  printing and stops before free storage falls below 1 GiB.
+- OrcaSlicer can start nozzle and bed heating concurrently using the start
+  G-code below.
 
 ## TL;DR
 
@@ -77,6 +89,25 @@ It’s restorable though, but **it requires additional hardware** or soldering i
 16. **Optional**: Enable [Bed Collision Protection](/docs/PRINTING.md#bed-collision-protection).   
 17. **Optional**: Enable [Bed Mesh Validation](/docs/PRINTING.md#bed-mesh-validation).
 18. **Optional**: Enable [Power Loss Recovery](docs/PRINTING.md#power-loss-recovery-resurrection).   
+19. **Optional**: Enable [Local Timelapse Capture](/docs/TIMELAPSE.md).
+
+### Concurrent Bed and Nozzle Heating
+
+In OrcaSlicer, open **Printer Settings → Machine G-code → Machine start G-code**
+and start the nozzle heater with non-blocking `M104` immediately before
+`START_PRINT`:
+
+```gcode
+KAMP_DEFINE_AREA MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MAX={first_layer_print_max[0]},{first_layer_print_max[1]}
+M104 S[nozzle_temperature_initial_layer]
+START_PRINT EXTRUDER_TEMP=[nozzle_temperature_initial_layer] BED_TEMP=[bed_temperature_initial_layer_single]
+```
+
+`M104` starts nozzle heating without waiting, allowing Forge-X to heat the bed
+and home concurrently. Automatic nozzle cleaning must remain enabled because
+the nozzle may ooze while the bed heats. Forge-X still cleans at print
+temperature, cools to `clear_cooldown_temp` for load-cell probing, runs the
+configured bed mesh procedure, and reheats before extrusion.
 
 ## Get Started
 
@@ -133,6 +164,7 @@ The existing Klipper implementation for the AD5M is outdated and plagued with bu
 - [F.A.Q](/docs/FAQ.md)
 - [Alternative Screen](/docs/SCREEN.md)
 - [Camera](/docs/CAMERA.md)
+- [Local Timelapse](/docs/TIMELAPSE.md)
 - [Telegram Bot and Timelapse](/docs/TELEGRAM.md)
 - [Dual boot](/docs/DUAL_BOOT.md)
 - [Uninstall](/docs/UNINSTALL.md)
