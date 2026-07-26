@@ -33,6 +33,10 @@ FPS=15
 # Video device: 'auto' or video<N> (like video0)
 VIDEO=auto
 
+# Network address exposed by mjpg-streamer. The loopback default prevents
+# unauthenticated access to the raw camera service.
+LISTEN_ADDRESS=127.0.0.1
+
 # Reduce camera memory usage
 # This may be handy if your camera consumes too much memory.
 # For example, even for 640x480 resolution, it may uses memory as it 1080p stream.
@@ -62,6 +66,11 @@ POST_PROCESSING=1
 # E_EXPOSURE_AUTO="3"
 # E_EXPOSURE_ABSOLUTE=80
 ```
+
+`LISTEN_ADDRESS=127.0.0.1` intentionally makes port 8080 reachable only from
+the printer itself. Access the camera through an authenticated reverse proxy or
+SSH tunnel. Set `LISTEN_ADDRESS=0.0.0.0` only when direct, unauthenticated LAN
+access to the camera is explicitly required.
 
 You can adjust these parameters to suit your needs. For example, you might want set better resolution or FPS.
 But be careful since, check actual camera ram usage after that, using `MEM` macros in Fluidd's console.
