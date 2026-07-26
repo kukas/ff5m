@@ -88,6 +88,7 @@ initialize() {
     ln -fs /opt/config/mod/.shell/S98camera /etc/init.d/
     ln -fs /opt/config/mod/.shell/S98zssh /etc/init.d/
     ln -fs /opt/config/mod/.shell/S99root /etc/init.d/
+    ln -fs /opt/config/mod/.shell/S99timelapse /etc/init.d/
     ln -fs /opt/config/mod/.shell/K99root /etc/init.d/
     
     # oh-my-zsh

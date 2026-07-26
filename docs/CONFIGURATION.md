@@ -53,6 +53,9 @@ The mod supports a wide range of parameters to customize printer behavior. Below
 
 - **`camera`**: Enables the alternative camera implementation if set to `1`.  
 
+- **`timelapse`**: Saves local JPEG timelapse frames while printing if set to
+  `1`. See [Local Timelapse Capture](/docs/TIMELAPSE.md).
+
 - **`filament_switch_sensor`**: Enables pause on filament runout if set to `1`.  
   **Note**: Only works with Feather/Headless screen.   
 

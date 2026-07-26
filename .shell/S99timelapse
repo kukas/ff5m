@@ -1,0 +1,78 @@
+#!/bin/bash
+
+## Local timelapse frame capture service
+##
+## This file may be distributed under the terms of the GNU GPLv3 license
+
+if [ -f /tmp/SKIP_MOD ] || [ -f /tmp/SKIP_MOD_SOFT ] || [ -f /tmp/SKIP_MOD_HARD ]; then
+    echo "Timelapse disabled due to SKIP_MOD mode"
+    exit 0
+fi
+
+source /opt/config/mod/.shell/common.sh
+
+CFG_PATH=/opt/config/mod_data/timelapse.conf
+DEFAULT_CFG=/opt/config/mod/.cfg/default/timelapse.conf
+DAEMON=/opt/config/mod/.shell/timelapse.sh
+PID_FILE=/run/timelapse.pid
+
+[ -f "$CFG_PATH" ] || cp "$DEFAULT_CFG" "$CFG_PATH"
+
+is_running() {
+    [ -f "$PID_FILE" ] || return 1
+    local pid
+    pid=$(cat "$PID_FILE" 2>/dev/null)
+    [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null
+}
+
+start() {
+    local enabled
+    enabled=$($CFG_SCRIPT "$VAR_PATH" --get "timelapse" "0")
+
+    if [ "$enabled" -ne 1 ]; then
+        echo "Timelapse disabled in configuration"
+        return 0
+    fi
+
+    if is_running; then
+        echo "Timelapse already running"
+        return 0
+    fi
+
+    rm -f "$PID_FILE"
+    echo "Starting timelapse..."
+    start-stop-daemon -Sbm -p "$PID_FILE" --exec "$DAEMON" -- "$CFG_PATH"
+}
+
+stop() {
+    echo "Stopping timelapse..."
+    if is_running; then
+        start-stop-daemon -K -p "$PID_FILE" >/dev/null 2>&1
+    fi
+    rm -f "$PID_FILE"
+}
+
+case "$1" in
+    start)
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    restart)
+        stop
+        sleep 1
+        start
+    ;;
+    status)
+        if is_running; then
+            echo "Timelapse is running (PID $(cat "$PID_FILE"))"
+        else
+            echo "Timelapse is stopped"
+        fi
+    ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+    ;;
+esac

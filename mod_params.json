@@ -299,6 +299,14 @@
       "order": 100
     },
     {
+      "key": "timelapse",
+      "type": "bool",
+      "default": 0,
+      "label": "Local timelapse capture",
+      "options": ["not used", "enabled"],
+      "order": 101
+    },
+    {
       "key": "zssh",
       "type": "bool",
       "default": 0,

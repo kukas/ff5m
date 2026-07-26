@@ -29,6 +29,7 @@ COMMON_CFG_PARAMS=(
     ./printer.base.cfg.bak
     ./mod_data/backup.params.cfg
     ./mod_data/camera.conf
+    ./mod_data/timelapse.conf
     ./mod_data/user.cfg
     ./mod_data/user.moonraker.conf
     ./mod_data/variables.cfg

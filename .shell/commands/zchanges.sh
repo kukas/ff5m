@@ -69,6 +69,15 @@ case "$key" in
             /etc/init.d/S98camera stop
         fi
     ;;
+
+    timelapse)
+        if [ "$value" -eq 1 ]; then
+            message "Timelapse frames are stored in /data/timelapse"
+            /etc/init.d/S99timelapse start
+        else
+            /etc/init.d/S99timelapse stop
+        fi
+    ;;
     
     tune_klipper)
         if "$SCRIPTS"/commands/ztune_klipper.sh "$value"; then

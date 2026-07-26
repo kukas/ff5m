@@ -108,6 +108,7 @@ uninstall() {
     rm -f /etc/init.d/S99moon
     rm -f /etc/init.d/S98camera
     rm -f /etc/init.d/S98zssh
+    rm -f /etc/init.d/S99timelapse
     rm -f /etc/init.d/K99moon
     rm -f /etc/init.d/K99root
     
